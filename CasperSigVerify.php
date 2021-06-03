@@ -7,8 +7,8 @@ use \phpseclib3\Crypt\PublicKeyLoader;
 class CasperSignature {
 	/*
 
-	* If CasperSignature->verify() returns false,
-	then the signature is invalid.
+	* If CasperSignature->verify() returns true,
+	then the signature is valid.
 
 	* If CasperSignature->verify() returns false,
 	then the signature is invalid.
