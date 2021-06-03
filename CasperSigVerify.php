@@ -6,6 +6,7 @@ use \phpseclib3\Crypt\PublicKeyLoader;
 
 class CasperSignature {
 	/*
+	@blockchainthomas
 
 	* If CasperSignature->verify() returns true,
 	then the signature is valid.

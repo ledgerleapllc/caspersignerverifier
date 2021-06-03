@@ -18,3 +18,9 @@ Contains a python3 script that generates a signature in hexidecimal format from 
 
 	$ python3 sign.py 'hello' test/test.secret.key test/test.public.key
 	$ php test/test.php
+
+## Contact
+
+**thomas@ledgerleap.com**
+
+**@blockchainthomas**
