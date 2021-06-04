@@ -14,10 +14,20 @@ Contains a python3 script that generates a signature in hexidecimal format from 
 
 ## Testing
 
-*test/* contains full test results and data that can be used to implement. The test key files, *test.secret.key*, *test.public.key*, *test.public.hex*, were generated using ***casper-client*** on a Casper node on 06/03/2021. Other methods have been used to generate keys, such as PHP generated ED25519 pairs, and python generated ED25519 pairs, and they seem to work. But we do not want to guarantee their stable support at this time. We will also be adding SEKP256k1 keypair support soon.
+*test/* contains full test results and data that can be used to implement. The test key files, *test.secret.key*, *test.public.key*, *test.public.hex*, were generated using ***casper-client*** on a Casper node on 06/03/2021. Other methods have been used to generate keys, such as PHP generated ED25519 pairs, and python generated ED25519 pairs, and they seem to work. But we do not want to guarantee their stable support at this time.
 
 	$ python3 sign.py 'hello' test/test.secret.key test/test.public.key
 	$ php test/test.php
+
+## SECP256k1 Support
+
+SECP256k1 is now supported. Pass the flag -s in python to specify, like:
+
+	$ python3 sign.py -s
+
+For the included testing script, pass the same flag into PHP, like:
+
+	$ php test/test.php -s
 
 ## Contact
 
