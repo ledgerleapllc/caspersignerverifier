@@ -25,7 +25,7 @@ SECP256k1 is now supported. The test keys used were generated using the ***caspe
 
 	$ python3 sign.py -s
 
-For the included testing script, pass the same flag into PHP, like:
+For the included signature testing script, pass the same flag into PHP, like:
 
 	$ php test/test.php -s
 
