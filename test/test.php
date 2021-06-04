@@ -4,23 +4,31 @@ include_once(dirname(__FILE__).'/../CasperSigVerify.php');
 use \phpseclib3\Crypt\EC;
 use \phpseclib3\Crypt\PublicKeyLoader;
 
+$my_signature = file_get_contents(
+	dirname(__FILE__).
+	'/../signature'
+);
+
+$my_validator_id = file_get_contents(
+	dirname(__FILE__).
+	'/test.public.hex'
+);
+
 if(
-	isset($argv) &&
-	isset($argv[1]) &&
-	$argv[1] == '-s'
+	(
+		isset($argv) &&
+		isset($argv[1]) &&
+		$argv[1] == '-s'
+	) || (
+		strlen($my_signature) > 128
+	)
 ) {
 	$my_validator_id = file_get_contents(
 		dirname(__FILE__).
 		'/secp256k1.public.hex'
 	);
-} else {
-	$my_validator_id = file_get_contents(
-		dirname(__FILE__).
-		'/test.public.hex'
-	);
 }
 
-$my_signature = file_get_contents(dirname(__FILE__).'/../signature');
 $my_message = 'hello';
 
 $c = new CasperSignature();

@@ -19,6 +19,10 @@ Contains a python3 script that generates a signature in hexidecimal format from 
 	$ python3 sign.py 'hello' test/test.secret.key test/test.public.key
 	$ php test/test.php
 
+Or use the pre-packaged all-in-one testing script.
+
+	$ sudo su $USER test/test.sh
+
 ## SECP256k1 Support
 
 SECP256k1 is now supported. The test keys used were generated using the ***casper-client*** on a Casper node on 06/04/2021. Pass the flag -s in python to specify, like:
