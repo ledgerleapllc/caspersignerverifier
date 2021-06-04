@@ -114,13 +114,10 @@ class CasperSignature {
 
 		} else {
 			// SECP256K1 SIGNATURE VERIFICATION
-			// throw new Exception("Our Validator Signature Verifier does not support SECP256K1 key signatures yet. 06/03/2021");
 			$public_key = (
 				$this->leading_hex_casperclient_secp256k1.
 				$validator_id
 			);
-
-			// file_put_contents('php://stderr', print_r($public_key,true));
 
 			$base64_public_key = base64_encode(
 				hex2bin($public_key)
@@ -141,8 +138,6 @@ class CasperSignature {
 				);
 			}
 
-			// file_put_contents('php://stderr', print_r($pemformat,true));
-
 			try {
 				$public_key_instance = PublicKeyLoader::load(
 					$pemformat,
@@ -151,8 +146,6 @@ class CasperSignature {
 			} catch(Exception $e) {
 				throw new Exception("Could not read user's public key\n\n".$e);
 			}
-
-			// file_put_contents('php://stderr', print_r($public_key_instance,true));
 
 			try {
 				$bytes_signature = hex2bin($signature);
