@@ -21,7 +21,7 @@ Contains a python3 script that generates a signature in hexidecimal format from 
 
 ## SECP256k1 Support
 
-SECP256k1 is now supported. Pass the flag -s in python to specify, like:
+SECP256k1 is now supported. The test keys used were generated using the ***casper-client*** on a Casper node on 06/04/2021. Pass the flag -s in python to specify, like:
 
 	$ python3 sign.py -s
 
