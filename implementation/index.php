@@ -84,8 +84,9 @@ if($file) {
 
 				<h3>Using file upload</h3>
 				<form action="<?php echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; ?>" method='post' enctype="multipart/form-data">
-				<input style="width: 100%; display: block; margin-bottom: 15px; padding: 6px;" type="file" name="signature-file" id="signature-file">
-				<button type="submit" class="btn btn-primary" id="verify-btn2">Verify Me</button>
+					<input style="width: 100%; display: block; margin-bottom: 15px; padding: 6px;" type="file" name="signature-file" id="signature-file">
+					<button type="submit" class="btn btn-primary" id="verify-btn2">Verify Me</button>
+				</form>
 			</div>
 		</div>
 	</div>
