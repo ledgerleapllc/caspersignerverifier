@@ -23,6 +23,20 @@ Or use the pre-packaged all-in-one testing script.
 
 	$ sudo su $USER test/test.sh
 
+For most users, the following process should be followed:
+
+Download a message file to be signed. It will contain a brief message and a timestamp. The message will be downloaded to the user's downloads folder.
+
+	$ python3 sign.py ~/Downloads/message.txt path/to/secret.key path/to/public.key
+
+You should see something like:
+
+	SIGNATURE:
+	19ad9719cb3f3...
+	GOOD SIGNATURE
+
+This output is producing the signature in the command line that can be copy/paste into a web form input. It is also outputting the signature to a file in the same directory as 'sign.py' named 'signature' for uploading. Either text input or file upload can be used for verification. But file upload method is most likely going to be implemented over copy/paste into form input.
+
 ## SECP256k1 Support
 
 SECP256k1 is now supported. The test keys used were generated using the ***casper-client*** on a Casper node on 06/04/2021. Pass the flag -s in python to specify, like:

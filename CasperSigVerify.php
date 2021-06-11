@@ -103,7 +103,7 @@ class CasperSignature {
 					$bytes_signature
 				);
 			} catch(Exception $e) {
-				throw new Exception("Invalid signature hex string\n\n".$e);
+				$signature_is_valid = false;
 			}
 
 			if($signature_is_valid) {

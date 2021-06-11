@@ -1,8 +1,6 @@
 <?php
 
 include_once(dirname(__FILE__).'/../CasperSigVerify.php');
-use \phpseclib3\Crypt\EC;
-use \phpseclib3\Crypt\PublicKeyLoader;
 
 $my_signature = file_get_contents(
 	dirname(__FILE__).
