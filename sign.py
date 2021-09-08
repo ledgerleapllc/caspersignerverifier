@@ -34,8 +34,8 @@ class CasperSigner():
 		self.vid_type = 2 if args.s else 1
 		# print(self.all_args)
 		# print(self.vid_type)
-		self.secret_key_file = '/etc/casper/validators_keys/secret_key.pem'
-		self.public_key_file = '/etc/casper/validators_keys/public_key.pem'
+		self.secret_key_file = '/etc/casper/validators_key/secret_key.pem'
+		self.public_key_file = '/etc/casper/validators_key/public_key.pem'
 		self.__secret_key_b64string = ""
 		self._public_key_b64string = ""
 		self._secp_verifying_key = None
@@ -52,9 +52,9 @@ class CasperSigner():
 		print("\n * Argument 1 is the path to the message to be signed,")
 		print("   or can also be the actual message string wrapped in quotes.")
 		print("\n * Argument 2 is the path to your secret key.")
-		print("   This argument defaults to '/etc/casper/validators_keys/secret_key.pem'")
+		print("   This argument defaults to '/etc/casper/validators_key/secret_key.pem'")
 		print("\n * Argument 3 is the path to your public key")
-		print("   This argument defaults to '/etc/casper/validators_keys/public_key.pem'")
+		print("   This argument defaults to '/etc/casper/validators_key/public_key.pem'")
 		print("   and is required if you want to verify your signature before")
 		print("   exporting it to the Casper Association. Otherwise it is optional.")
 		print("")
