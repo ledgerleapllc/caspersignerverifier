@@ -6,6 +6,12 @@
 
 Contains a python3 script that generates a signature in hex string format from a validator's keys for the purpose of providing proof of ownership of a node to the Casper Association. Also contains a PHP class that is to be implemented by the Casper Association Portal for instant verification of a given node's signature.
 
+## Requirements
+
+* Python 3.7+
+* ed25519 python package
+* ecdsa python package
+
 ## Setup
 
 	$ git clone https://github.com/ledgerleapllc/caspersignerverifier
@@ -26,6 +32,8 @@ If you want to run PHP based test suite, you will need to install those dependen
 Or use the pre-packaged all-in-one testing script.
 
 	$ sudo su $USER test/test.sh
+
+## Usage
 
 For most users, the following process should be followed:
 
