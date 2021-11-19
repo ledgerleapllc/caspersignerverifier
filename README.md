@@ -14,24 +14,32 @@ Contains a python3 script that generates a signature in hex string format from a
 
 ## Setup
 
-	$ git clone https://github.com/ledgerleapllc/caspersignerverifier
-	$ cd caspersignerverifier/
-	$ python3 sign.py
+```bash
+git clone https://github.com/ledgerleapllc/caspersignerverifier
+cd caspersignerverifier/
+python3 sign.py
+```
 
 If you want to run PHP based test suite, you will need to install those dependencies also.
 
-	$ composer install
+```bash
+composer install
+```
 
 ## Testing
 
 *test/* contains full test results and data that can be used to implement. The test key files, *test.secret.key*, *test.public.key*, *test.public.hex*, were generated using ***casper-client*** on a Casper node on 06/03/2021. Other methods have been used to generate keys, such as PHP generated ED25519 pairs, and python generated ED25519 pairs, and they seem to work. But we do not want to guarantee their stable support at this time.
 
-	$ python3 sign.py 'hello' test/test.secret.key test/test.public.key
-	$ php test/test.php
+```bash
+python3 sign.py 'hello' test/test.secret.key test/test.public.key
+php test/test.php
+```
 
 Or use the pre-packaged all-in-one testing script.
 
-	$ sudo su $USER test/test.sh
+```bash
+sudo su $USER test/test.sh
+```
 
 ## Usage
 
@@ -39,7 +47,9 @@ For most users, the following process should be followed:
 
 Download a message file to be signed. It will contain a brief message and a timestamp. The message will be downloaded to the user's downloads folder.
 
-	$ python3 sign.py ~/Downloads/message.txt path/to/secret.key path/to/public.key
+```bash
+python3 sign.py ~/Downloads/message.txt path/to/secret.key path/to/public.key
+```
 
 You should see something like:
 
@@ -53,11 +63,15 @@ This output is producing the signature in the command line that can be copy/past
 
 SECP256k1 is now supported. The test keys used were generated using the ***casper-client*** on a Casper node on 06/04/2021. Pass the flag -s in python to specify, like:
 
-	$ python3 sign.py -s
+```bash
+python3 sign.py -s
+```
 
 For the included signature testing script, pass the same flag into PHP, like:
 
-	$ php test/test.php -s
+```bash
+php test/test.php -s
+```
 
 ## Contact
 
