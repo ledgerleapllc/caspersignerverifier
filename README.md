@@ -4,12 +4,16 @@
 
 ## Description
 
-Contains a python3 script that generates a signature in hexidecimal format from a validator's keys for the purpose of providing proof of ownership of a node to the Casper Association. Also contains a PHP class that is to be implemented by the Casper Association Portal for instant verification of a given node's signature.
+Contains a python3 script that generates a signature in hex string format from a validator's keys for the purpose of providing proof of ownership of a node to the Casper Association. Also contains a PHP class that is to be implemented by the Casper Association Portal for instant verification of a given node's signature.
 
 ## Setup
 
 	$ git clone https://github.com/ledgerleapllc/caspersignerverifier
 	$ cd caspersignerverifier/
+	$ python3 sign.py
+
+If you want to run PHP based test suite, you will need to install those dependencies also.
+
 	$ composer install
 
 ## Testing

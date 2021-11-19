@@ -242,6 +242,7 @@ if __name__ == "__main__":
 	with open("%s/signature" % casigner.current_path, 'w') as write_signature:
 		write_signature.write(signature)
 
-	print("\nSIGNATURE: \n")
-	print(signature)
+	sig_type = 'SECP256k1' if casigner.vid_type == 2 else 'ED25519'
+	print("\n%s SIGNATURE: " % sig_type, signature)
+	# print(signature)
 	print("\nGOOD SIGNATURE" if is_verified else "\nCOULD NOT VERIFY SIGNATURE")
