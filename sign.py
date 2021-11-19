@@ -62,10 +62,9 @@ class CasperSigner():
 		print("")
 		print("Examples:")
 		print("")
-		print('  python3 sign.py "sign this message"')
 		print('  python3 sign.py /etc/casper/message.txt')
-		print('  python3 sign.py "sign this message" /home/secret_key /home/public_key')
-		print('  python3 sign.py -s "sign this message" /home/secp256k1_secret_key')
+		print('  python3 sign.py ~/Downloads/message.txt /home/secret_key /home/public_key')
+		print('  python3 sign.py -s ~/message.txt /home/secp256k1_secret_key')
 		print('')
 
 	def process_args(self):
