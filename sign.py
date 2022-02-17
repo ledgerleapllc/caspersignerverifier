@@ -245,3 +245,4 @@ if __name__ == "__main__":
 	print("\n%s SIGNATURE: " % sig_type, signature)
 	# print(signature)
 	print("\nGOOD SIGNATURE" if is_verified else "\nCOULD NOT VERIFY SIGNATURE")
+	print("\nYour signature file has been written to %s/signature." % casigner.current_path)
