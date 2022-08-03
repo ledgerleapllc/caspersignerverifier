@@ -292,20 +292,14 @@ class CasperSigner(Ed25519):
 		parser.add_argument(
 			'args', 
 			nargs = '*', 
-			help = 'Positional arguments for specifying message, secret key, and public key - in that order.'
-		)
-
-		parser.add_argument(
-			'-s', 
-			action = 'store_true', 
-			help = 'This flag instructs the signer to expect a SECP256K1 keypair instead of the default ED25519.'
+			help = 'Positional arguments for specifying message, secret key, and public key hex - in that order.'
 		)
 
 		args = parser.parse_args()
 		self.all_args = args.args
 		self.vid_type = 1
 		self.secret_key_file = '/etc/casper/validator_keys/secret_key.pem'
-		self.public_key_hex = ''
+		self.public_key_hex  = '/etc/casper/validator_keys/public_key_hex'
 		self.__secret_key_b64string = ""
 		self._public_key_b64string = ""
 		self._secp_verifying_key = None
@@ -318,9 +312,9 @@ class CasperSigner(Ed25519):
 		bcolor = BColors()
 		print("%sCasper Association%s Signer script -" % (bcolor.red2, bcolor.end))
 		print("")
-		print("This script is intended to produce signatures over the command line so that members can ")
+		print("This script is intended to produce ownership verification signatures over the command line.")
 		print("")
-		print("This Signer Script takes 3 arguments:")
+		print("This Signer Script can take 3 arguments:")
 		print("\n %s* Argument 1 is the path to 'message.txt'%s to be signed. (required)" % (bcolor.green, bcolor.end))
 		print("   This is downloaded from the Casper Association's member portal dashboard.")
 		print("\n %s* Argument 2 is the path to your secret key%s." % (bcolor.green, bcolor.end))
@@ -331,58 +325,76 @@ class CasperSigner(Ed25519):
 		print("   it is a standard CasperLabs type ED25519 public key.")
 		print("   If your public key begins with a '02' byte, then")
 		print("   it is a CasperLabs type SECP256K1 public key.")
-		print("   This script will automatically detect the correct case for your key.")
+		print("   This script will automatically find and verify your public key hex if not specified.")
 		print("")
 		print("Example usage:")
 		print("")
-		print('  python3 sign.py  /path/to/message.txt  /path/to/secret_key.pem  VALIDATOR_ID')
-		print('  python3 sign.py  ~/Downloads/message.txt  /etc/casper/validator_keys/secret_key.pem  011117189c666f81c5160cd610ee383dc9b2d0361f004934754d39752eedc64957')
-		print('')
+		print("  python3 sign.py  ~/path/to/message.txt")
+		print("  python3 sign.py  ~/Downloads/message.txt  /etc/casper/validator_keys/secret_key.pem  011117189c666f81c5160cd610ee383dc9b2d0361f004934754d39752eedc64957")
+		print("")
+		print("Note:")
+		print("   Sudo may be required for the script to read the contents of secret_key.pem")
+		print("")
 
 	def process_args(self):
 		if len(self.all_args) == 0:
 			self.show_help()
 			sys.exit(0)
 
-		if len(self.all_args) > 2:
-			# message arg
+		# get message
+		if len(self.all_args) > 0:
 			self.message = self.all_args[0]
-			if(
-				'/' in self.message or
-				os.path.isfile(self.message)
-			):
+			if os.path.isfile(self.message):
 				try:
 					message_file = open(self.message, 'r')
 					self.message = message_file.read().strip()
 					message_file.close()
 				except OSError:
-					print("Could not find the message file '%s'" % self.message)
+					print("Could not open the message file '%s'" % self.message)
 					sys.exit(2)
-
-			# secret key arg
-			self.secret_key_file = self.all_args[1]
-			if not os.path.isfile(self.secret_key_file):
-				print("Could not find secret key '%s'" % self.secret_key_file)
-				self.show_help()
+			else:
+				print("Could not find the message file '%s'" % self.message)
 				sys.exit(3)
 
-			# public key arg
-			self.public_key_hex = self.all_args[2]
-			first_byte = self.public_key_hex[:2]
-			if first_byte == '01':
-				self.vid_type = 1
-			elif first_byte == '02':
-				self.vid_type = 2
-			else:
-				print("Invalid public key hex '%s'" % self.public_key_hex)
-				self.show_help()
-				sys.exit(4)
+		# get secret key
+		if len(self.all_args) > 1:
+			# get secret key from arg
+			self.secret_key_file = self.all_args[1]
 
-			self.public_key_hex = self.public_key_hex[2:]
-		else:
-			print("Missing arguments")
-			self.show_help()
+		# get secret key from default
+		if not os.path.isfile(self.secret_key_file):
+			print("Could not find secret key '%s'" % self.secret_key_file)
 			sys.exit(5)
+
+		# get address
+		if len(self.all_args) > 2:
+			# get address from arg
+			self.public_key_hex = self.all_args[2]
+		else:
+			# get address from default
+			if not os.path.isfile(self.public_key_hex):
+				print("Could not find public_key_hex '%s'" % self.public_key_hex)
+				sys.exit(6)
+			else:
+				try:
+					public_key_hex_file = open(self.public_key_hex, 'r')
+					self.public_key_hex = public_key_hex_file.read().strip()
+					public_key_hex_file.close()
+				except OSError:
+					print("Could not find the public_key_hex file '%s'" % self.public_key_hex)
+					sys.exit(7)
+
+		# verify public_key_hex
+		first_byte = self.public_key_hex[:2]
+		if first_byte == '01':
+			self.vid_type = 1
+		elif first_byte == '02':
+			self.vid_type = 2
+		else:
+			print("Invalid public key hex '%s'" % self.public_key_hex)
+			sys.exit(8)
+
+		self.public_key_hex = self.public_key_hex[2:]
 
 		return True
 
@@ -393,7 +405,7 @@ class CasperSigner(Ed25519):
 			secret_key_file_handler = open(self.secret_key_file, 'r')
 		except:
 			print("Cannot find secret key file '%s'" % self.secret_key_file)
-			sys.exit(5)
+			sys.exit(9)
 
 		secret_key_read = secret_key_file_handler.readlines()
 		secret_key_file_handler.close()

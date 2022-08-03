@@ -17,9 +17,73 @@ class CasperSignature {
 	*/
 
 	function __construct() {
-		$this->leading_hex_casperclient = '302a300506032b6570032100';
-		$this->leading_hex_phpseclib3 = '302c300706032b65700500032100';
-		$this->leading_hex_casperclient_secp256k1 = '3036301006072a8648ce3d020106052b8104000a032200';
+		// Base ASN1 codes
+		$sequence       = '30';
+		$object_ident   = '06';
+		$bit_string     = '03';
+		$end_of_content = '00';
+
+		// ed25519 OID
+		$ed25519_bitstring_length = '21';
+		$ed25519_identity         = '2b6570'; // 1.3.101.112
+
+		// calculate ed25519 sequence
+		$ed25519_identity_length = dechex(strlen($ed25519_identity) / 2);
+		$ed25519_identity_length = strlen($ed25519_identity_length) % 2 == 0 ?
+			$ed25519_identity_length :
+			'0'.$ed25519_identity_length;
+
+		$ed25519_sequence_length = dechex(
+			2 + hexdec($ed25519_bitstring_length) +
+			2 + hexdec($ed25519_identity_length)
+		);
+
+		$ed25519_sequence_length = strlen($ed25519_sequence_length) % 2 == 0 ?
+			$ed25519_sequence_length :
+			'0'.$ed25519_sequence_length;
+
+		// sec256k1 OID
+		$sec256k1_bitstring_length = '22';
+		$sec256k1_identity         = '2b8104000a'; // 1.3.132.0.10
+
+		// calculate sec256k1 sequence
+		$sec256k1_identity_length = dechex(strlen($sec256k1_identity) / 2);
+		$sec256k1_identity_length = strlen($sec256k1_identity_length) % 2 == 0 ?
+			$sec256k1_identity_length :
+			'0'.$sec256k1_identity_length;
+
+		$sec256k1_sequence_length = dechex(
+			2 + hexdec($sec256k1_bitstring_length) +
+			2 + hexdec($sec256k1_identity_length)
+		);
+
+		$sec256k1_sequence_length = strlen($sec256k1_sequence_length) % 2 == 0 ?
+			$sec256k1_sequence_length :
+			'0'.$sec256k1_sequence_length;
+
+		// build ed25519 leading ASN1 hex
+		$this->ed25519_leading_hex =
+			$sequence.
+			$ed25519_sequence_length.
+			$object_ident.
+			$ed25519_identity_length.
+			$ed25519_identity.
+			$bit_string.
+			$ed25519_bitstring_length.
+			$end_of_content
+		;
+
+		// build sec256k1 leading ASN1 hex
+		$this->secp256k1_leading_hex =
+			$sequence.
+			$sec256k1_sequence_length.
+			$object_ident.
+			$sec256k1_identity_length.
+			$sec256k1_identity.
+			$bit_string.
+			$sec256k1_bitstring_length.
+			$end_of_content
+		;
 	}
 
 	function __destruct() {}
@@ -34,7 +98,7 @@ class CasperSignature {
 			!$validator_id ||
 			!$message
 		) {
-			throw new Exception("\n\nCasperSignature->verify(sig, vid, msg) requires 3 arguments:\n\n * 1. The signature as a hex string.\n\n * 2. The Validator Id as a hex string. Expecting 66 characters (33 bytes) represented by 32 bytes with a prepended '01' byte indicating ED25519 type, or 68 characters (34 bytes) represented by 33 bytes with a prepended '02' byte indicating SECP256K1 type.\n\n * 3. The original message that was signed by the user.\n\n");
+			throw new Exception("\n\nCasperSignature->verify(signature, validator_id, message) requires 3 arguments:\n\n * 1. The signature as a hex string.\n\n * 2. The Validator Id as a hex string. Expecting 66 characters (33 bytes) represented by 32 bytes with a prepended '01' byte indicating ED25519 type, or 68 characters (34 bytes) represented by 33 bytes with a prepended '02' byte indicating SECP256K1 type.\n\n * 3. The original message that was signed by the user.\n\n");
 		}
 
 		if(
@@ -68,7 +132,7 @@ class CasperSignature {
 			// ED25519 SIGNATURE VERIFICATION
 
 			$public_key = (
-				$this->leading_hex_casperclient.
+				$this->ed25519_leading_hex.
 				$validator_id
 			);
 
@@ -115,7 +179,7 @@ class CasperSignature {
 		} else {
 			// SECP256K1 SIGNATURE VERIFICATION
 			$public_key = (
-				$this->leading_hex_casperclient_secp256k1.
+				$this->secp256k1_leading_hex.
 				$validator_id
 			);
 
